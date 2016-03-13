@@ -4,9 +4,22 @@ import java.util.Stack;
 
 public class ArbolAVL {
 	public Nodo raiz;
+	public Archivo archivo;
 
 	public ArbolAVL() {
-		raiz = null;
+		archivo=new Archivo();
+		if(archivo.exists){
+			System.out.println("El arbol existe :v");
+			try {
+				raiz=archivo.recon();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else{
+			raiz=null;
+			System.out.println("El arbol no existe");
+		}
 	}
 
 	private void rotarDerecha(Nodo p, Nodo q) {
@@ -14,6 +27,8 @@ public class ArbolAVL {
 		q.bal = 0;
 		p.izq = q.der;
 		q.der = p;
+		archivo.modificarNodo(p);
+		archivo.modificarNodo(q);
 	}
 
 	private void rotarIzquierda(Nodo p, Nodo q) {
@@ -21,6 +36,8 @@ public class ArbolAVL {
 		q.bal = 0;
 		p.der = q.izq;
 		q.izq = p;
+		archivo.modificarNodo(p);
+		archivo.modificarNodo(q);
 	}
 
 	private Nodo dobleRotacionDerecha(Nodo p, Nodo q) {
@@ -43,6 +60,9 @@ public class ArbolAVL {
 			break;
 		}
 		r.bal = 0;
+		archivo.modificarNodo(p);
+		archivo.modificarNodo(q);
+		archivo.modificarNodo(r);
 		return r;
 	}
 
@@ -67,16 +87,23 @@ public class ArbolAVL {
 
 		}
 		r.bal = 0;
+		archivo.modificarNodo(p);
+		archivo.modificarNodo(q);
+		archivo.modificarNodo(r);
 		return r;
 	}
 
 	public void agregarLlave(int n) {
-		Nodo nuevo, p, q, s, pivote, pp;
+		Nodo nuevo, p, q, s, pivote, pp,a;
 		int llave, altura;
 
 		nuevo = new Nodo(n);
 		if (raiz == null) {
+			nuevo.num_p=archivo.siguienteLibre();
+			archivo.cambiarRaiz(nuevo.num_p);
+			archivo.modificarNodo(nuevo);
 			raiz = nuevo;
+			System.out.println("Agregando cabeza arbol");
 			return;
 		}
 		pp = q = null;
@@ -97,10 +124,15 @@ public class ArbolAVL {
 					p = p.der;
 			}
 		}
-		if (llave < q.info)
+		nuevo.num_p=archivo.siguienteLibre();
+		if (llave < q.info){
 			q.izq = nuevo;
-		else
+		}
+		else{
 			q.der = nuevo;
+		}
+		archivo.modificarNodo(nuevo);// modificando el nodo recien agregado
+		archivo.modificarNodo(q);// modificando el padre del nodo recien agregado
 		if (llave < pivote.info) {
 			s = pivote.izq;
 			altura = 1;
@@ -112,16 +144,23 @@ public class ArbolAVL {
 		while (p != nuevo) {
 			if (llave < p.info) {
 				p.bal = 1;
+				a=p;
 				p = p.izq;
 			} else {
 				p.bal = -1;
+				a=p;
 				p = p.der;
 			}
+			archivo.modificarNodo(a);// modificando balanceo del recorrido
 		}
-		if (pivote.bal == 0)
+		if (pivote.bal == 0){
 			pivote.bal = altura;
-		else if (pivote.bal + altura == 0)
+			archivo.modificarNodo(pivote);//cambiando privote
+		}
+		else if (pivote.bal + altura == 0){
 			pivote.bal = 0;
+			archivo.modificarNodo(pivote);//cambiando privote
+		}
 		else {
 			if (altura == 1) {
 				if (s.bal == 1)
@@ -134,12 +173,19 @@ public class ArbolAVL {
 				else
 					s = dobleRotacionIzquierda(pivote, s);
 			}
-			if (pp == null)
+			if (pp == null){
 				raiz = s;
-			else if (pp.izq == pivote)
-				pp.izq = s;
-			else
-				pp.der = s;
+				archivo.cambiarRaiz(s.num_p);
+			}
+			else {
+				if (pp.izq == pivote){
+					pp.izq = s;
+				}
+				else{
+					pp.der = s;
+				}
+				archivo.modificarNodo(pp);
+			}
 		}
 	}
 	
@@ -178,6 +224,7 @@ public class ArbolAVL {
 		switch (q.bal) {
 		case 1:
 			q.bal = 0;
+			archivo.modificarNodo(q);
 			break;
 		case -1:
 			t = q.der;
@@ -192,12 +239,15 @@ public class ArbolAVL {
 				q.der = t.izq;
 				t.izq = q;
 				t.bal = 1;
+				archivo.modificarNodo(q);
+				archivo.modificarNodo(t);
 				terminar[0] = 1;
 				break;
 			}
 			break;
 		case 0:
 			q.bal = -1;
+			archivo.modificarNodo(q);
 			terminar[0] = 1;
 			break;
 		}
@@ -209,6 +259,7 @@ public class ArbolAVL {
 		switch (q.bal) {
 		case -1:
 			q.bal = 0;
+			archivo.modificarNodo(q);
 			break;
 		case 1:
 			t = q.izq;
@@ -223,12 +274,15 @@ public class ArbolAVL {
 				q.izq = t.der;
 				t.der = q;
 				t.bal = -1;
+				archivo.modificarNodo(q);
+				archivo.modificarNodo(t);
 				terminar[0] = 1;
 				break;
 			}
 			break;
 		case 0:
 			q.bal = 1;
+			archivo.modificarNodo(q);
 			terminar[0] = 1;
 			break;
 		}
@@ -255,8 +309,10 @@ public class ArbolAVL {
 				p = p.izq;
 			else if (n > p.info)
 				p = p.der;
-			else
+			else{
+				archivo.eliminarNodo(p.num_p);
 				encontro = true;
+			}
 		}
 		if (!encontro) {
 			return (2);
@@ -308,9 +364,11 @@ public class ArbolAVL {
 					break;
 				case 1:
 					raiz = p.izq;
+					archivo.cambiarRaiz(p.izq.num_p);
 					break;
 				case 2:
 					raiz = p.der;
+					archivo.cambiarRaiz(p.der.num_p);
 					break;
 				}
 			}
@@ -323,6 +381,8 @@ public class ArbolAVL {
 				pila.push(p);
 				q = p;
 				p = p.izq;
+				archivo.modificarNodo(q);
+				archivo.modificarNodo(p);
 			}
 			llave = r.info = p.info;
 			if (q != null) {
@@ -339,26 +399,33 @@ public class ArbolAVL {
 			if (llave < q.info) {
 				if (t != null) {
 					q.izq = t;
+					archivo.modificarNodo(q);
 					t = null;
 				}
 				t = balanceoDerecha(q, terminar);
-			} else {
+			}
+			else {
 				if (t != null) {
 					q.der = t;
+					archivo.modificarNodo(q);
 					t = null;
 				}
 				t = balanceoIzquierda(q, terminar);
 			}
 		}
 		if (t != null) {
-			if (pila.empty() == true)
+			if (pila.empty() == true){
 				raiz = t;
+				archivo.cambiarRaiz(t.num_p);
+				archivo.modificarNodo(t);
+			}
 			else {
 				q = (Nodo) pila.pop();
 				if (llave < q.info)
 					q.izq = t;
 				else
 					q.der = t;
+				archivo.modificarNodo(q);
 			}
 		}
 		return 0;

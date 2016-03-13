@@ -32,8 +32,7 @@ public class Vista extends JFrame implements ActionListener{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Vista frame = new Vista();
-					frame.setVisible(true);
+					new Vista();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -45,6 +44,7 @@ public class Vista extends JFrame implements ActionListener{
 	 * Create the frame.
 	 */
 	public Vista() {
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1343, 633);
 		contentPane = new JPanel();
@@ -78,6 +78,9 @@ public class Vista extends JFrame implements ActionListener{
 		contentPane.add(canvas);
 		
 		arbol=new ArbolAVL();
+		if(arbol.raiz!=null){
+			canvas.setCabeza(arbol.raiz);
+		}
 	}
 
 	@Override

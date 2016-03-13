@@ -36,7 +36,7 @@ public class CanvasArbol extends Canvas {
 	}
 	
 	@Override
-	public void paint(Graphics g) {
+	public void update(Graphics g) {
 		imagen=createImage(this.getWidth(),this.getHeight());
 		graficas=imagen.getGraphics();
 		graficas.setColor(Color.orange);

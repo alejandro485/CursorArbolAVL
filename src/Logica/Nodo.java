@@ -10,6 +10,7 @@ public class Nodo {
 	public Nodo(int n) {
 		info = n;
 		bal = 0;
+		num_p = 0;
 		izq = der = null;
 	}
 }
