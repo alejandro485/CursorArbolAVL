@@ -91,8 +91,8 @@ public class Archivo {
 			a.writeInt(i);
 			a.seek(3*desp);
 			a.writeInt(n);
-			System.out.println("Siguiente vacio "+n+" en "+a.getFilePointer());
-			System.out.println("Siguiente del siguiente "+i+" en "+b);
+			System.out.println("Siguiente vacio "+i+" en "+a.getFilePointer());
+			System.out.println("Siguiente del siguiente "+n+" en "+b);
 			a.close();
 		} catch (Exception e) {
 			e.printStackTrace();

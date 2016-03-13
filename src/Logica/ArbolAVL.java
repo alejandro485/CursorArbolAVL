@@ -310,7 +310,6 @@ public class ArbolAVL {
 			else if (n > p.info)
 				p = p.der;
 			else{
-				archivo.eliminarNodo(p.num_p);
 				encontro = true;
 			}
 		}
@@ -336,10 +335,12 @@ public class ArbolAVL {
 					case 0:
 					case 1:
 						q.izq = p.izq;
+						archivo.modificarNodo(q);
 						t = balanceoDerecha(q, terminar);
 						break;
 					case 2:
 						q.izq = p.der;
+						archivo.modificarNodo(q);
 						t = balanceoDerecha(q, terminar);
 						break;
 					}
@@ -348,10 +349,12 @@ public class ArbolAVL {
 					case 0:
 					case 2:
 						q.der = p.der;
+						archivo.modificarNodo(q);
 						t = balanceoIzquierda(q, terminar);
 						break;
 					case 1:
 						q.der = p.izq;
+						archivo.modificarNodo(q);
 						t = balanceoIzquierda(q, terminar);
 						break;
 					}
@@ -360,18 +363,20 @@ public class ArbolAVL {
 				switch (accion) {
 				case 0:
 					raiz = null;
+					archivo.cambiarRaiz(0);
 					terminar[0] = 1;
 					break;
 				case 1:
 					raiz = p.izq;
-					archivo.cambiarRaiz(p.izq.num_p);
+					archivo.cambiarRaiz(raiz.num_p);
 					break;
 				case 2:
 					raiz = p.der;
-					archivo.cambiarRaiz(p.der.num_p);
+					archivo.cambiarRaiz(raiz.num_p);
 					break;
 				}
 			}
+			archivo.eliminarNodo(p.num_p);
 		} else {
 			pila.push(p);
 			r = p;
@@ -381,15 +386,17 @@ public class ArbolAVL {
 				pila.push(p);
 				q = p;
 				p = p.izq;
-				archivo.modificarNodo(q);
-				archivo.modificarNodo(p);
 			}
 			llave = r.info = p.info;
+			archivo.modificarNodo(r);
+			archivo.eliminarNodo(p.num_p);
 			if (q != null) {
 				q.izq = p.der;
+				archivo.modificarNodo(q);
 				t = balanceoDerecha(q, terminar);
 			} else {
 				r.der = p.der;
+				archivo.modificarNodo(r);
 				t = balanceoIzquierda(r, terminar);
 			}
 			q = (Nodo) pila.pop();
