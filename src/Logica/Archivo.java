@@ -21,7 +21,7 @@ public class Archivo {
 					exists=false;
 			}
 			else{
-				for(int i=1; i<100; i++){
+				for(int i=1; i<3; i++){
 					a.writeInt(0);
 					a.writeInt(0);
 					a.writeInt(0);
@@ -32,12 +32,43 @@ public class Archivo {
 				a.writeInt(0);
 				a.writeInt(0);
 				exists=false;
+                                a.seek(desp);
+                                a.writeInt(3);
 			}
 			a.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+        
+        public int aumentarArchivo(){
+            int j=0, b=0;
+            try {
+                a.seek(desp);
+                b=a.readInt();
+                a.seek(b*16);
+                for(int i=1; i<5;i++){
+                    a.writeInt(0);
+                    a.writeInt(0);
+                    a.writeInt(0);
+                    a.writeInt(b+i);
+                }
+                a.writeInt(0);
+                a.writeInt(0);
+                a.writeInt(0);
+                a.writeInt(0);
+                j=b+5;
+                a.seek(desp);
+                a.writeInt(j);
+                a.seek(3*desp);
+                a.writeInt(b);
+                
+                System.out.println("Aumentando archivo "+j+", b: "+b);
+            } catch (Exception ex) {
+                ex.getStackTrace();
+            }
+            return b;
+        }
 	
 	public int siguienteLibre(){
 		int i, j, b;
@@ -45,6 +76,9 @@ public class Archivo {
 			a=new RandomAccessFile(file, "rw");
 			a.seek(3*desp);
 			i=a.readInt();
+                        if(i==0){
+                            i=aumentarArchivo();
+                        }
 			System.out.println("siguiente libre: "+i+" p: "+a.getFilePointer());
 			b=(i*4*desp)+(3*desp);
 			a.seek(b);
