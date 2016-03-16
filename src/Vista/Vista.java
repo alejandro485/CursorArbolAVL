@@ -23,6 +23,7 @@ public class Vista extends JFrame implements ActionListener{
 	private JTextField txtLlave;
 	private JButton btnEliminar;
 	private JButton btnAgregar;
+        private JButton btnListar;
 	private CanvasArbol canvas;
 
 	/**
@@ -72,6 +73,12 @@ public class Vista extends JFrame implements ActionListener{
 		btnEliminar.setActionCommand("el");
 		btnEliminar.addActionListener(this);
 		contentPane.add(btnEliminar);
+                
+                btnListar = new JButton("Listar");
+                btnListar.setBounds(500, 7, 117, 25);
+                btnListar.setActionCommand("la");
+                btnListar.addActionListener(this);
+                contentPane.add(btnListar);
 		
 		canvas=new CanvasArbol();
 		canvas.setBounds(10, 40, 1323, 590);
@@ -85,14 +92,16 @@ public class Vista extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		switch(e.getActionCommand()){
-			case "ag":
-				arbol.agregarLlave(Integer.parseInt(txtLlave.getText()));
-				break;
-			case "el":
-				arbol.retirarLlave(Integer.parseInt(txtLlave.getText()));
-				break;
-		}
-		canvas.setCabeza(arbol.raiz);
+		if(e.getActionCommand().equals("ag")) {
+                    arbol.agregarLlave(Integer.parseInt(txtLlave.getText()));
+                    canvas.setCabeza(arbol.raiz);
+                }
+		if(e.getActionCommand().equals("el")) {
+                    arbol.retirarLlave(Integer.parseInt(txtLlave.getText()));
+                    canvas.setCabeza(arbol.raiz);
+                }
+                if(e.getActionCommand().equals("la")){
+                    canvas.setArchivo(arbol.archivo.a);
+                }
 	}
 }
