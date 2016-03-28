@@ -13,17 +13,17 @@ import javax.swing.JButton;
 
 import Logica.ArbolAVL;
 
-public class Vista extends JFrame implements ActionListener{
+public class Vista extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private ArbolAVL arbol;
-	
+
 	private JPanel contentPane;
 	private JTextField txtLlave;
 	private JButton btnEliminar;
 	private JButton btnAgregar;
-        private JButton btnListar;
+	private JButton btnListar;
 	private CanvasArbol canvas;
 
 	/**
@@ -52,56 +52,56 @@ public class Vista extends JFrame implements ActionListener{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblLlave = new JLabel("Llave");
 		lblLlave.setBounds(12, 12, 70, 15);
 		contentPane.add(lblLlave);
-		
+
 		txtLlave = new JTextField();
 		txtLlave.setBounds(76, 12, 114, 19);
 		contentPane.add(txtLlave);
 		txtLlave.setColumns(10);
-		
+
 		btnAgregar = new JButton("Agregar");
 		btnAgregar.setBounds(239, 7, 117, 25);
 		btnAgregar.setActionCommand("ag");
 		btnAgregar.addActionListener(this);
 		contentPane.add(btnAgregar);
-		
+
 		btnEliminar = new JButton("Eliminar");
 		btnEliminar.setBounds(368, 7, 117, 25);
 		btnEliminar.setActionCommand("el");
 		btnEliminar.addActionListener(this);
 		contentPane.add(btnEliminar);
-                
-                btnListar = new JButton("Listar");
-                btnListar.setBounds(500, 7, 117, 25);
-                btnListar.setActionCommand("la");
-                btnListar.addActionListener(this);
-                contentPane.add(btnListar);
-		
-		canvas=new CanvasArbol();
+
+		btnListar = new JButton("Listar");
+		btnListar.setBounds(500, 7, 117, 25);
+		btnListar.setActionCommand("la");
+		btnListar.addActionListener(this);
+		contentPane.add(btnListar);
+
+		canvas = new CanvasArbol();
 		canvas.setBounds(10, 40, 1323, 590);
 		contentPane.add(canvas);
-		
-		arbol=new ArbolAVL();
-		if(arbol.raiz!=null){
+
+		arbol = new ArbolAVL();
+		if (arbol.raiz != null) {
 			canvas.setCabeza(arbol.raiz);
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("ag")) {
-                    arbol.agregarLlave(Integer.parseInt(txtLlave.getText()));
-                    canvas.setCabeza(arbol.raiz);
-                }
-		if(e.getActionCommand().equals("el")) {
-                    arbol.retirarLlave(Integer.parseInt(txtLlave.getText()));
-                    canvas.setCabeza(arbol.raiz);
-                }
-                if(e.getActionCommand().equals("la")){
-                    canvas.setArchivo(arbol.archivo.a);
-                }
+		if (e.getActionCommand().equals("ag")) {
+			arbol.agregarLlave(Integer.parseInt(txtLlave.getText()));
+			canvas.setCabeza(arbol.raiz);
+		}
+		if (e.getActionCommand().equals("el")) {
+			arbol.retirarLlave(Integer.parseInt(txtLlave.getText()));
+			canvas.setCabeza(arbol.raiz);
+		}
+		if (e.getActionCommand().equals("la")) {
+			canvas.setArchivo(arbol.archivo.a);
+		}
 	}
 }
